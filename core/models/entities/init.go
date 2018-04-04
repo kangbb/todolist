@@ -12,7 +12,7 @@ var Engine *xorm.Engine
 
 func init() {
 	var err error
-	engine, err := xorm.NewEngine("mysql", "root:root@/golang?charset=utf8")
+	engine, err := xorm.NewEngine("mysql", "root:root@tcp(127.0.0.1:3308)/todolist?charset=utf8&parseTime=true")
 	if err != nil {
 		panic(err)
 	}
