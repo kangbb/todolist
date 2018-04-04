@@ -1,7 +1,6 @@
 package service
 
 import (
-	"time"
 	"log"
 	"github.com/kangbb/todolist/core/models/entities"
 )
