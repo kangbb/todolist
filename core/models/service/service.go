@@ -46,7 +46,7 @@ func UpdateItem(label string, isFinished bool, t string) (bool, error) {
 	items := GetItems(label, t)
 	log.Println(items)
 	item := NewItem(label, isFinished, t)
-	affected, err := entities.SlaveEngine.Id(items[0].ItemID).Cols("is_finished").Update(&item)
+	affected, err := entities.MasterEngine.Id(items[0].ItemID).Cols("is_finished").Update(&item)
 	if err != nil {
 		log.Println("err: ", err)
 		log.Println("affaected: ", affected)
@@ -58,7 +58,7 @@ func UpdateItem(label string, isFinished bool, t string) (bool, error) {
 func DeleteItem(label string, isFinished bool, t string) (bool, error) {
 	items := GetItems(label, t)
 	item := new(entities.ItemInfo)
-	affected, err := entities.SlaveEngine.Id(items[0].ItemID).Delete(item)
+	affected, err := entities.MasterEngine.Id(items[0].ItemID).Delete(item)
 	if err != nil {
 		log.Println("err: ", err)
 		log.Println("affaected: ", affected)

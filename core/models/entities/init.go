@@ -16,7 +16,7 @@ var SlaveEngine *xorm.Engine
 
 func init() {
 	var err error
-	MasterEngine, err = xorm.NewEngine("mysql", "root:master@tcp(master:3306)/todolist?charset=utf8&parseTime=true")
+	MasterEngine, err = xorm.NewEngine("mysql", "root:master@tcp(dbmaster:3306)/todolist?charset=utf8&parseTime=true")
 	if err != nil {
 		panic(err)
 	}
@@ -25,7 +25,7 @@ func init() {
 		panic(err)
 	}
 
-	SlaveEngine, err = xorm.NewEngine("mysql", "root:slave@tcp(slave:3306)/todolist?charset=utf8&parseTime=true")
+	SlaveEngine, err = xorm.NewEngine("mysql", "root:slave@tcp(dbslave:3306)/todolist?charset=utf8&parseTime=true")
 	if err != nil {
 		panic(err)
 	}
