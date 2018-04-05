@@ -1,1 +1,1 @@
-cp -r ~/Work/todolist/dist/ ./static
+cp -r ~/Work/todolist/dist/ ./static/

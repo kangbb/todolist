@@ -1,15 +1,17 @@
 package controller
+
 import (
+	"encoding/json"
 	"log"
 	"net/http"
-	"encoding/json"
-	"strconv"
+
+	simplejson "github.com/bitly/go-simplejson"
 	"github.com/kangbb/todolist/core/models/service"
 )
 
 func dataProcess(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
-		postData(w,r)
+		postData(w, r)
 	} else if r.Method == "GET" {
 		getData(w)
 	} else {
@@ -18,15 +20,26 @@ func dataProcess(w http.ResponseWriter, r *http.Request) {
 }
 
 //处理Post数据
-//数据格式 {method:add/update/delete, label: string, isFinished: bool }
+//这里的数据要和表格提交验证区分开
+//数据格式 {method:add/update/delete, label: string, isFinished: bool, time: string }
 func postData(w http.ResponseWriter, r *http.Request) {
-	method := r.Form["method"][0]
+	defer r.Body.Close()
+	js, err := simplejson.NewFromReader(r.Body)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(500)
+		return
+	}
+	method := js.Get("method").MustString()
+	label := js.Get("Label").MustString()
+	isFinished := js.Get("IsFinished").MustBool()
+	time := js.Get("CreateAt").MustString()
 	if method == "add" {
-		addData(w, r.Form)
+		addData(w, label, isFinished, time)
 	} else if method == "update" {
-    updateData(w, r.Form)
+		updateData(w, label, isFinished, time)
 	} else {
-    deleteData(w, r.Form)
+		deleteData(w, label, isFinished, time)
 	}
 }
 
@@ -39,9 +52,8 @@ func getData(w http.ResponseWriter) {
 }
 
 /*----------------------------------------------*/
-func addData(w http.ResponseWriter, data map[string][]string) {
-	isFinished, _ := strconv.ParseBool(data["isFinished"][0])
-	_, err := service.CreateItem(data["label"][0], isFinished, data["time"][0])
+func addData(w http.ResponseWriter, label string, isFinished bool, time string) {
+	_, err := service.CreateItem(label, isFinished, time)
 	if err != nil {
 		log.Println(err)
 		w.WriteHeader(400)
@@ -49,23 +61,21 @@ func addData(w http.ResponseWriter, data map[string][]string) {
 	}
 	w.WriteHeader(200)
 }
-func updateData(w http.ResponseWriter, data map[string][]string) {
-	isFinished, _ := strconv.ParseBool(data["isFinished"][0])
-  _, err := service.UpdateItem(data["label"][0], isFinished, data["time"][0])
+func updateData(w http.ResponseWriter, label string, isFinished bool, time string) {
+	_, err := service.UpdateItem(label, isFinished, time)
 	if err != nil {
 		log.Println(err)
 		w.WriteHeader(400)
 		w.Write([]byte("unknown wrong!"))
 	}
-  w.WriteHeader(200)
+	w.WriteHeader(200)
 }
-func deleteData(w http.ResponseWriter, data map[string][]string) {
-	isFinished, _ := strconv.ParseBool(data["isFinished"][0])
-  _, err := service.DeleteItem(data["label"][0], isFinished, data["time"][0])
+func deleteData(w http.ResponseWriter, label string, isFinished bool, time string) {
+	_, err := service.DeleteItem(label, isFinished, time)
 	if err != nil {
 		log.Println(err)
 		w.WriteHeader(400)
 		w.Write([]byte("unknown wrong!"))
 	}
-  w.WriteHeader(200)
+	w.WriteHeader(200)
 }

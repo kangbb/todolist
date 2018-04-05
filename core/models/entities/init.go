@@ -8,17 +8,36 @@ import (
 	"github.com/go-xorm/xorm"
 )
 
-var Engine *xorm.Engine
+// set mysql master and slave service
+// master as a writer
+// slave as reader
+var MasterEngine *xorm.Engine
+var SlaveEngine *xorm.Engine
 
 func init() {
 	var err error
-	engine, err := xorm.NewEngine("mysql", "root:root@tcp(127.0.0.1:3308)/todolist?charset=utf8&parseTime=true")
+	MasterEngine, err = xorm.NewEngine("mysql", "root:master@tcp(master:3306)/todolist?charset=utf8&parseTime=true")
 	if err != nil {
 		panic(err)
 	}
-	Engine = engine
+	err = MasterEngine.Sync2(new(ItemInfo))
+	if err != nil {
+		panic(err)
+	}
+
+	SlaveEngine, err = xorm.NewEngine("mysql", "root:slave@tcp(slave:3306)/todolist?charset=utf8&parseTime=true")
+	if err != nil {
+		panic(err)
+	}
+	err = SlaveEngine.Sync2(new(ItemInfo))
+	if err != nil {
+		panic(err)
+	}
+
 	if os.Getenv("DEBUG") == "TRUE" {
-		Engine.ShowSQL(true)
-		Engine.Logger().SetLevel(core.LOG_DEBUG)
+		MasterEngine.ShowSQL(true)
+		MasterEngine.Logger().SetLevel(core.LOG_DEBUG)
+		SlaveEngine.ShowSQL(true)
+		SlaveEngine.Logger().SetLevel(core.LOG_DEBUG)
 	}
 }
