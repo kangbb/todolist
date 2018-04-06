@@ -16,8 +16,8 @@ jobs:
   - stage: build
     script:
     - go build .
-    - docker build -t todolist.
-    - docker imges
+    - docker build -t todolist .
+    - docker images
   - stage: deploy
     script:
     - touch ~/.ssh/id_rsa
