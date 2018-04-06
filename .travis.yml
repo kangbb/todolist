@@ -11,15 +11,4 @@ branches:
 addons:
   ssh_known_hosts:
   - 119.23.243.149
-jobs:
-  include:
-  - stage: test the project
-    - go build
-  - stage: build docker image
-    script:
-    - docker build -t todolist.
-    - docker imges
-  - stage: deploy
-    script:
-    - touch ~/.ssh/id_rsa
-    - ssh -o StrictHostKeyChecking=no root@119.23.243.149 "~/update.sh $REGISTRY $REPOSITORY $MIRROR_NAME"
+script: go build .
