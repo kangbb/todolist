@@ -9,7 +9,7 @@ services:
       - "80:80"
     volumes:
       - $HOME/etc/nginx/conf.d:/etc/nginx/conf.d
-      - $HOME/opt:/opt
+      - $HOME/opt:/etc/ssl/certs
     links:
       - todolist
     logging:
