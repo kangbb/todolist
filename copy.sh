@@ -1,1 +1,0 @@
-cp -r ~/Work/todolist/dist/ ./static/
