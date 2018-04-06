@@ -1,0 +1,29 @@
+sudo: required
+dist: trusty
+language: go
+services:
+- docker
+go:
+- master
+branches:
+  only:
+  - master
+addons:
+  ssh_known_hosts:
+  - 119.23.243.149
+jobs:
+  include:
+  - stage: test
+    srcipt:
+    - go test
+    - go build
+  - stage: build & test docker image
+    script:
+    - docker build -t ma-image .
+    - docker run -it -d -p 8080:8080 --rm --name app  ma-image
+    - docker ps -a
+  - stage: deploy
+    script:
+    - touch ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh -o StrictHostKeyChecking=no root@119.23.243.149 "~/update.sh $REGISTRY $REPOSITORY $MIRROR_NAME"
