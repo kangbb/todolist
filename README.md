@@ -17,3 +17,11 @@
 - `Dockerfile`：生成镜像
 - `.travis.yml`：自动集成及部署文件
 
+## 其他
+如何使用travis cli免密登录服务器？
+>[一点都不高大上，手把手教你使用Travis CI实现持续部署](https://zhuanlan.zhihu.com/p/25066056)
+
+如何加密密钥？通过travis-cli运行如下命令：
+```
+$ travis encrypt-file ~/.ssh/id_rsa --add
+```
