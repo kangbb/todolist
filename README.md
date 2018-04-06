@@ -1,6 +1,6 @@
 # TODOLIST
 ![build](https://travis-ci.org/kangbb/todolist.svg?branch=master)
-一个简单的网站demo。
+<br/>一个简单的网站demo。
 ## 主要特点
 1. 完全自动化部署：Travis CLI持续集成+阿里云docker容器服务+阿里云ECS主机
 2. 使用docker及docker-compose快速编排服务
