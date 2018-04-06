@@ -13,17 +13,13 @@ addons:
   - 119.23.243.149
 jobs:
   include:
-  - stage: test
-    srcipt:
-    - go test
+  - stage: test the project
     - go build
-  - stage: build & test docker image
+  - stage: build docker image
     script:
-    - docker build -t ma-image .
-    - docker run -it -d -p 8080:8080 --rm --name app  ma-image
-    - docker ps -a
+    - docker build -t todolist.
+    - docker imges
   - stage: deploy
     script:
     - touch ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa
     - ssh -o StrictHostKeyChecking=no root@119.23.243.149 "~/update.sh $REGISTRY $REPOSITORY $MIRROR_NAME"
