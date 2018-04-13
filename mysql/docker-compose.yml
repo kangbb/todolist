@@ -1,7 +1,7 @@
 version: "3"
 services:
   dbmaster:
-    image: master/mysql:latest
+    image: registry.cn-shenzhen.aliyuncs.com/selfmysql/master:latest
     container_name: dbmaster
     ports:
       - "3308:3306"
@@ -18,7 +18,7 @@ services:
       - app
 
   dbslave:
-    image: slave/mysql:latest
+    image: registry.cn-shenzhen.aliyuncs.com/selfmysql/slave:latest
     container_name: dbslave
     ports:
       - "3309:3306"
@@ -33,8 +33,6 @@ services:
       options:
         max-size: "1000k"
         max-file: "20"
-    links:
-      - dbmaster
     networks:
       - app
 networks:

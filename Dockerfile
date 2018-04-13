@@ -1,4 +1,5 @@
 FROM golang:latest
+ENV LANG="C.UTF-8"
 
 # get workdir
 RUN mkdir /toDoList
