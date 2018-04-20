@@ -26,5 +26,10 @@
 ```
 $ travis encrypt-file ~/.ssh/id_rsa --add
 ```
+
+如何在docker容器内部使用中文？例如：
+```
+docker run -it --rm --net host mysql:latest env LANG=C.UTF-8 /bin/bash
+```
 ## ngnix配置问题
 如果使用docker 镜像，一定要同时映射两个端口：`80`和`443`.
